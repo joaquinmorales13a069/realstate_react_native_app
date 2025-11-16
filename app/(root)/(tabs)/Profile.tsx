@@ -5,12 +5,14 @@ import {
     Image,
     TouchableOpacity,
     ImageSourcePropType,
+    Alert,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "@/constants/icons";
-import images from "@/constants/images";
 import { settings } from "@/constants/data";
+import { useGlobalContext } from "@/libs/globalProvider";
+import { logout } from "@/libs/appwrite";
 
 interface SettingsItemProps {
     icon: ImageSourcePropType;
@@ -45,7 +47,18 @@ const SettingsItem = ({
 );
 
 export default function Profile() {
-    const handleLogOut = async () => {};
+    const { user, refetch } = useGlobalContext();
+    const handleLogOut = async () => {
+        const result = await logout();
+
+        if (result) {
+            Alert.alert("Success", "You have been logged out.");
+            refetch();
+        }
+        else {
+            Alert.alert("Error", "Failed to log out. Please try again.");
+        }
+    };
     return (
         <SafeAreaView className="h-full bg-white">
             <ScrollView
@@ -60,14 +73,14 @@ export default function Profile() {
                 <View className="flex flex-row justify-center mt-5">
                     <View className="relative flex flex-col items-center mt-5">
                         <Image
-                            source={images.avatar}
+                            source={{ uri: user?.avatar }}
                             className="relative rounded-full size-44"
                         />
                         <TouchableOpacity className="absolute bottom-11 right-2">
                             <Image source={icons.edit} className="size-9" />
                         </TouchableOpacity>
                         <Text className="mt-2 text-2xl font-rubikBold">
-                            Joaquin | JSM
+                            {user?.name}
                         </Text>
                     </View>
                 </View>
@@ -88,7 +101,13 @@ export default function Profile() {
                 </View>
 
                 <View className="flex flex-col pt-5 mt-5 border-t border-primary-200">
-                    <SettingsItem icon={icons.logout} title="Log Out" textStyle="text-danger" showArrow={false} onPress={handleLogOut}/>
+                    <SettingsItem
+                        icon={icons.logout}
+                        title="Log Out"
+                        textStyle="text-danger"
+                        showArrow={false}
+                        onPress={handleLogOut}
+                    />
                 </View>
             </ScrollView>
         </SafeAreaView>
