@@ -1,11 +1,12 @@
 {
   "expo": {
+    "owner": "joaquinmorales13a06",
     "name": "r_n_realstate",
     "slug": "r_n_realstate",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon-realstate.png",
-    "scheme": "restate",
+    "scheme": "appwrite-callback-6918845f000e457fca09",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
