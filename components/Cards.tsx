@@ -2,18 +2,31 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
+import { Models } from "react-native-appwrite";
+
+interface Property extends Models.Document {
+    image: string;
+    rating: number;
+    name: string;
+    address: string;
+    price: number;
+}
 
 interface Props {
+    item: Property;
     onPress: () => void;
 }
 
-export default function FeaturedCards({ onPress }: Props) {
+export default function FeaturedCards({
+    item: { image, rating, name, address, price },
+    onPress,
+}: Props) {
     return (
         <TouchableOpacity
             onPress={onPress}
-            className="flex relative flex-col items-start w-60 h-80"
+            className="relative flex flex-col items-start w-60 h-80"
         >
-            <Image source={images.japan} className="rounded-2xl size-full" />
+            <Image source={{ uri: image }} className="rounded-2xl size-full" />
             <Image
                 source={images.cardGradient}
                 className="absolute bottom-0 rounded-2xl size-full"
@@ -22,25 +35,25 @@ export default function FeaturedCards({ onPress }: Props) {
             <View className="flex flex-row items-center bg-white/90 px-3 py-1.5 rounded-full absolute top-5 right-5">
                 <Image source={icons.star} className="size-3.5" />
                 <Text className="ml-1 text-xs font-rubikBold text-primary-300">
-                    4.4
+                    {rating}
                 </Text>
             </View>
-            <View className="flex absolute inset-x-5 bottom-5 flex-col items-start">
+            <View className="absolute flex flex-col items-start inset-x-5 bottom-5">
                 <Text
                     className="text-xl text-white font-rubikExtraBold"
                     numberOfLines={1}
                 >
-                    Mordern Apartment
+                    {name}
                 </Text>
                 <Text
                     className="text-base text-white font-rubik"
                     numberOfLines={1}
                 >
-                    22 W 34th St, New York, NY
+                    {address}
                 </Text>
-                <View className="flex flex-row justify-between items-center w-full">
+                <View className="flex flex-row items-center justify-between w-full">
                     <Text className="text-xl text-white font-rubikExtraBold">
-                        $2,500
+                        ${price}
                     </Text>
                     <Image source={icons.heart} className="size-5" />
                 </View>
@@ -50,39 +63,39 @@ export default function FeaturedCards({ onPress }: Props) {
 }
 
 // Normal card component
-export const Card = ({ onPress }: Props) => {
+export const Card = ({
+    item: { image, rating, name, address, price },
+    onPress,
+}: Props) => {
     return (
         <TouchableOpacity
-            className="relative flex-1 px-3 py-4 mt-4 w-full bg-white rounded-lg shadow-lg shadow-black-100/70"
+            className="relative flex-1 w-full px-3 py-4 mt-4 bg-white rounded-lg shadow-lg shadow-black-100/70"
             onPress={onPress}
         >
-            <View className="flex absolute top-5 right-5 z-50 flex-row items-center p-1 px-2 rounded-full bg-white/90">
+            <View className="absolute z-50 flex flex-row items-center p-1 px-2 rounded-full top-5 right-5 bg-white/90">
                 <Image source={icons.star} className="size-2.5" />
                 <Text className="text-xs font-rubik-bold text-primary-300 ml-0.5">
-                    4.4
+                    {rating}
                 </Text>
             </View>
 
-            <Image
-                source={images.newYork}
-                className="w-full h-40 rounded-lg"
-            />
+            <Image source={{ uri: image }} className="w-full h-40 rounded-lg" />
 
             <View className="flex flex-col mt-2">
                 <Text className="text-base font-rubik-bold text-black-300">
-                    Modern Apartment
+                    {name}
                 </Text>
                 <Text className="text-xs font-rubik text-black-100">
-                    22 W 34th St, New York, NY
+                    {address}
                 </Text>
 
-                <View className="flex flex-row justify-between items-center mt-2">
+                <View className="flex flex-row items-center justify-between mt-2">
                     <Text className="text-base font-rubik-bold text-primary-300">
-                        $2,500
+                        ${price}
                     </Text>
                     <Image
                         source={icons.heart}
-                        className="mr-2 w-5 h-5"
+                        className="w-5 h-5 mr-2"
                         tintColor="#191D31"
                     />
                 </View>

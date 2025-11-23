@@ -6,7 +6,7 @@ import { categories } from "@/constants/data";
 const Filters = () => {
     const params = useLocalSearchParams<{ filter: string }>();
     const [selectedCategory, setSelectedCategory] = useState(
-        params.filter || "All"
+        params.filter || "All",
     );
 
     function handleCategoryPress(category: string) {
@@ -14,7 +14,7 @@ const Filters = () => {
             setSelectedCategory("All");
             router.setParams({ filter: "All" });
             return;
-        }else {
+        } else {
             setSelectedCategory(category);
             router.setParams({ filter: category });
         }
@@ -27,12 +27,12 @@ const Filters = () => {
         >
             {categories.map((item, index) => (
                 <TouchableOpacity
-                    className={`flex flex-col items-start px-4 py-2 mr-4 rounded-full ${selectedCategory === item.title ? "bg-primary-300" : "bg-primary-100 border border-primary-200 "}`}
-                    onPress={() => handleCategoryPress(item.title)}
+                    className={`flex flex-col items-start px-4 py-2 mr-4 rounded-full ${selectedCategory === item.category ? "bg-primary-300" : "bg-primary-100 border border-primary-200 "}`}
+                    onPress={() => handleCategoryPress(item.category)}
                     key={index}
                 >
                     <Text
-                        className={`text-sm ${selectedCategory === item.title ? "text-white font-rubikBold mt-0.5" : "text-black-300 font-rubik"}`}
+                        className={`text-sm ${selectedCategory === item.category ? "text-white font-rubikBold mt-0.5" : "text-black-300 font-rubik"}`}
                     >
                         {item.title}
                     </Text>
