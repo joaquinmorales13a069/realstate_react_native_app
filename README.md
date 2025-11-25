@@ -1,50 +1,63 @@
-# Welcome to your Expo app 👋
+# Restate — Real Estate Finder
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Restate is a React Native app built with Expo Router that lets users browse, filter, and view detailed information about properties. It integrates Appwrite for data and auth, and uses Tailwind (via NativeWind) for styling.
 
-## Get started
+## Key Features
+- Browse featured and recommended properties on the home tab.
+- Search and filter (type, query) in Explore.
+- Property detail pages with photos, facilities, reviews, and agent info.
+- Expo Router file-based navigation.
+- Appwrite backend for properties, galleries, reviews, agents, and auth.
 
-1. Install dependencies
+## Project Structure
+- `app/` – Expo Router entry point.
+  - `_layout.tsx` – Root layout and providers.
+  - `(root)/` – Authenticated stack.
+    - `_layout.tsx` – Tabs layout.
+    - `(tabs)/index.tsx` – Home feed (featured + recommended).
+    - `(tabs)/Explore.tsx` – Search/filter screen.
+    - `(tabs)/Profile.tsx` – User profile tab.
+    - `properties/[id].tsx` – Property detail page.
+  - `SignIn.tsx` – Sign-in flow.
+- `components/` – UI components (cards, search, filters, comments, etc.).
+- `constants/` – Icons, images, and static data.
+- `libs/` – Appwrite client, hooks (`useAppwrite`), and data functions.
+- `types/` – Shared TypeScript types.
 
-   ```bash
-   npm install
-   ```
+## Data & Functionality
+- Fetch properties: `libs/appwrite.ts#getProperties` and `getLatestProperties` query Appwrite collections with filters/search.
+- Fetch a property by id: `getPropertyById` returns the property plus related agent, gallery items, and reviews (joined by `propertyId`).
+- Global auth: `libs/appwrite.ts#login/logout/getCurrentUser` manage Appwrite sessions; `libs/globalProvider` (not shown here) exposes `useGlobalContext` in screens.
+- UI: Cards trigger `router.push('/properties/[id]')` to open the detail screen. Detail renders ratings, facilities, gallery, reviews, and agent contact.
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Getting Started
+1) Install dependencies
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2) Add environment config (see `.env` or Expo public vars) for Appwrite:
+- `EXPO_PUBLIC_APPWRITE_ENDPOINT`
+- `EXPO_PUBLIC_APPWRITE_PROJECT_ID`
+- `EXPO_PUBLIC_APPWRITE_DATABASE_ID`
+- `EXPO_PUBLIC_APPWRITE_PROPERTIES_TABLE_ID`
+- `EXPO_PUBLIC_APPWRITE_GALERIES_TABLE_ID`
+- `EXPO_PUBLIC_APPWRITE_REVIEWS_TABLE_ID`
+- `EXPO_PUBLIC_APPWRITE_AGENTS_TABLE_ID`
 
-## Learn more
+3) Run the app
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npx expo start
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Open on Expo Go, iOS simulator, or Android emulator. Tabs are registered via Expo Router; deep links follow the file paths above.
 
-## Join the community
+## Notes & Troubleshooting
+- If properties or agents don’t load, ensure the Appwrite collections contain documents with `propertyId` set in galleries/reviews and an agent id on the property (field `agentId` or `agent` relation).
+- The detail screen expects optional arrays; missing data will render empty states instead of errors.
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Scripts
+- `npm start` / `npx expo start` – Run Metro bundler.
+- `npm run lint` – Lint project files.
