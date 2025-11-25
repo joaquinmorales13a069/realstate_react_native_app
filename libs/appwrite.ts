@@ -152,7 +152,8 @@ export async function getPropertyById({ id }: { id: string }) {
     const result = await databases.getDocument(
       config.databaseId!,
       config.propertiesCollectionId!,
-      id
+      id,
+      [Query.select(['*', 'agent.*'])]
     );
     return result;
   } catch (error) {

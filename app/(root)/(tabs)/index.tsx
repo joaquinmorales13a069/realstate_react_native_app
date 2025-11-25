@@ -38,7 +38,7 @@ export default function Index() {
     });
 
     const handleCardPress = (id: string) => {
-        router.push(`/property/${id}` as Href);
+        router.push(`/properties/${id}` as Href);
     };
 
     useEffect(() => {
