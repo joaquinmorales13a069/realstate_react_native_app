@@ -32,7 +32,7 @@ export default function Explore() {
     });
 
     const handleCardPress = (id: string) => {
-        router.push(`/property/${id}` as Href);
+        router.push(`/properties/${id}` as Href);
     };
 
     useEffect(() => {
